@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  </head>
+  <style>
+    .card img{
+        height: 40vh;
+    }
+    .card{
+        height: 60vh;
+        box-shadow: 2px 4px 4px #c2c2c2;
+        background-color: aliceblue;
+    }
+    .row{
+        margin-top: 20px;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <div class="row" id="card-container"></div>
+    </div>
+    
+    <script>
+      const cardContainer = document.getElementById('card-container');
+      const promises = [];
+      for (let i = 1; i <= 3; i++) {
+        const promise = fetch(`https://reqres.in/api/users?page=${i}`)
+          .then(response => response.json())
+          .then(data => data.data);
+        promises.push(promise);
+      }
+      Promise.all(promises)
+        .then(pages => {
+          const users = pages.flat();
+          users.forEach(user => {
+            const card = document.createElement('div');
+            card.className = 'col-md-4 col-lg-3 col-6 mb-4';
+            card.innerHTML = `
+              <div class="card">
+                <img src="${user.avatar}" class="card-img-top" alt="${user.first_name} ${user.last_name}">
+                <div class="card-body">
+                  <h5 class="card-title">${user.first_name} ${user.last_name}</h5>
+                  <p class="card-text">${user.id} - ${user.email}</p>
+                </div>
+              </div>
+            `;
+            cardContainer.appendChild(card);
+          });
+        })
+        .catch(error => console.error(error));
+    </script>
+  </body>
+</html>

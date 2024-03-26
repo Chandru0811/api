@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API</title>
+  </head>
+  <body>
+    <h1>Hello World</h1>
+    <div id="demo"></div>
+    <script>
+      fetch("https://reqres.in/api/users?page")
+        .then((response) => response.json())
+        .then((json) => {
+          const userElements = json.map((user) => `
+            <div>
+              <p>Name: ${user.first_name} ${user.last_name}</p>
+              <p>Email: ${user.email}</p>
+              <hr>
+            </div>
+          `);
+          document.getElementById('demo').innerHTML = userElements.join('');
+        });
+    </script>
+  </body>
+</html>
